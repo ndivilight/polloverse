@@ -1,0 +1,12 @@
+{
+  "name": "polloverse-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/build.mjs && npx --yes serve@14.2.4 dist"
+  },
+  "dependencies": {
+    "marked": "12.0.2"
+  }
+}
