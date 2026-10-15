@@ -63,7 +63,7 @@ If you were given patch notes **without** a ROM, or a ROM **without** notes, ask
 ## 3. Conventions (must follow)
 
 ### Language and tone
-- **All visitor-facing text is Spanish** (Dominican, informal: "¡Dale!", "klk"), matching Freddy's voice. Keep his emojis.
+- **All visitor-facing text is Spanish** (Dominican, informal: "¡Dale!", "klk"), matching the project voice. Keep the emojis.
 - Code, tags and file names stay as-is.
 
 ### Tags (`tag_name`)
