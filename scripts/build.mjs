@@ -72,10 +72,10 @@ function normalize(r) {
 
 function renderLatest(rel) {
   if (!rel) {
-    return `<div class="latest-card"><p class="muted">Todavía no hay versiones publicadas.</p></div>`;
+    return `<div class="latest-card textbox"><p class="muted">Todavía no hay versiones publicadas.</p></div>`;
   }
   const rom = rel.rom;
-  return `<div class="latest-card">
+  return `<div class="latest-card textbox">
   <div class="latest-head">
     <span class="badge badge-new">Última versión</span>
     <span class="muted">${esc(formatDate(rel.date))}</span>
@@ -95,7 +95,7 @@ function renderChangelog(releases, latestTag) {
   return releases
     .map((r) => `<article class="release" id="v-${esc(r.tag)}">
   <div class="release-rail" aria-hidden="true"><span class="dot${r.tag === latestTag ? ' dot-live' : ''}"></span></div>
-  <div class="release-body">
+  <div class="release-body pixel-frame">
     <header class="release-head">
       <h3><a href="#v-${esc(r.tag)}">${esc(r.name)}</a></h3>
       <div class="release-meta">
