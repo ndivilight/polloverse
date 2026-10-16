@@ -53,7 +53,8 @@ async function fetchReleases() {
 function normalize(r) {
   const body = r.body || '';
   const date = body.match(DATE_RE)?.[1] || r.published_at || r.created_at;
-  const rom = r.assets.find((a) => ROM_RE.test(a.name)) || r.assets[0] || null;
+  // The big button is the ready-to-play .gba; a .bps patch is only listed next to it.
+  const rom = r.assets.find((a) => /\.gba$/i.test(a.name)) || r.assets.find((a) => ROM_RE.test(a.name)) || r.assets[0] || null;
   return {
     tag: r.tag_name,
     name: r.name || r.tag_name,
@@ -62,7 +63,9 @@ function normalize(r) {
     prerelease: r.prerelease,
     url: r.html_url,
     notesHtml: marked.parse(body.replace(DATE_RE, '').trim() || '_Sin notas._'),
-    files: r.assets.filter((a) => ROM_RE.test(a.name)).map((a) => ({ name: a.name, size: a.size, url: a.browser_download_url })),
+    files: r.assets.filter((a) => ROM_RE.test(a.name))
+      .sort((x, y) => Number(!/\.gba$/i.test(x.name)) - Number(!/\.gba$/i.test(y.name)))
+      .map((a) => ({ name: a.name, size: a.size, url: a.browser_download_url })),
     rom: rom && {
       name: rom.name,
       size: rom.size,
