@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" data-lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,16 +14,29 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script>
+    // Pick the language before the first paint (no flash of the other language).
+    (function () {
+      var l = new URLSearchParams(location.search).get('lang');
+      try { l = l || localStorage.getItem('pv-lang'); } catch (e) {}
+      document.documentElement.dataset.lang = l === 'en' ? 'en' : 'es';
+      document.documentElement.lang = document.documentElement.dataset.lang;
+    })();
+  </script>
+  <script src="app.js" defer></script>
 </head>
 <body>
   <header class="topbar">
     <div class="wrap topbar-inner">
       <a class="brand" href="#top"><img src="assets/rooster.png" alt="" width="46" height="35"> Polloverse</a>
       <nav class="nav">
-        <a href="#descargar">Descargar</a>
-        <a href="#novedades">Novedades</a>
+        <a href="#descargar"><span data-l="es">Descargar</span><span data-l="en">Download</span></a>
+        <a href="#novedades"><span data-l="es">Novedades</span><span data-l="en">Changelog</span></a>
+        <a href="#pokedex">Pokédex</a>
+        <a href="#objetos"><span data-l="es">Objetos</span><span data-l="en">Items</span></a>
         <a href="#roadmap">Roadmap</a>
-        <a href="#como-jugar">Cómo jugar</a>
+        <a href="#como-jugar"><span data-l="es">Cómo jugar</span><span data-l="en">How to play</span></a>
+        <button id="lang-toggle" class="lang-toggle" type="button"><span data-l="es">EN</span><span data-l="en">ES</span></button>
       </nav>
     </div>
   </header>
@@ -38,8 +51,9 @@
             <p class="eyebrow-sub">by Los Gallos Sin Planes</p>
             <h1>POLLOVERSE</h1>
           </div>
-          <p class="lede">Hoenn + Kanto en un solo juego, 16 gimnasios, todos los Pokémon de Gen 1–4… y <strong>Satoshi</strong> te espera donde menos lo crees.</p>
-          <p class="byline">Por <strong>Los Gallos Sin Planes</strong> · Cake &amp; Others</p>
+          <p class="lede" data-l="es">Hoenn + Kanto en un solo juego, 16 gimnasios, todos los Pokémon de Gen 1–4… y <strong>Satoshi</strong> te espera donde menos lo crees.</p>
+          <p class="lede" data-l="en">Hoenn + Kanto in one game, 16 gyms, every Pokémon from Gen 1–4… and <strong>Satoshi</strong> is waiting where you least expect him.</p>
+          <p class="byline"><span data-l="es">Por</span><span data-l="en">By</span> <strong>Los Gallos Sin Planes</strong> · Cake &amp; Others</p>
         </div>
         <div id="descargar" class="hero-download">
           <!--LATEST-->
@@ -48,51 +62,105 @@
     </section>
 
     <section class="wrap features" aria-label="Características">
-      <div class="feature pixel-frame"><span class="feature-icon" aria-hidden="true">🗺️</span><h3>Hoenn + Kanto</h3><p>Dos regiones en una sola partida.</p></div>
-      <div class="feature pixel-frame"><span class="feature-icon" aria-hidden="true">🏅</span><h3>16 gimnasios</h3><p>Ocho medallas por región.</p></div>
-      <div class="feature pixel-frame"><span class="feature-icon" aria-hidden="true">📖</span><h3>Gen 1–4</h3><p>Todos los Pokémon hasta Sinnoh.</p></div>
-      <div class="feature pixel-frame"><span class="feature-icon" aria-hidden="true">🔥</span><h3>Modo Gallinero</h3><p>Sin items en batalla, level caps y una IA que no perdona.</p></div>
+      <div class="feature pixel-frame"><span class="feature-icon" aria-hidden="true">🗺️</span><h3>Hoenn + Kanto</h3><p data-l="es">Dos regiones en una sola partida.</p><p data-l="en">Two regions in a single save.</p></div>
+      <div class="feature pixel-frame"><span class="feature-icon" aria-hidden="true">🏅</span><h3><span data-l="es">16 gimnasios</span><span data-l="en">16 gyms</span></h3><p data-l="es">Ocho medallas por región.</p><p data-l="en">Eight badges per region.</p></div>
+      <div class="feature pixel-frame"><span class="feature-icon" aria-hidden="true">📖</span><h3>Gen 1–4</h3><p data-l="es">Todos los Pokémon hasta Sinnoh.</p><p data-l="en">Every Pokémon up to Sinnoh.</p></div>
+      <div class="feature pixel-frame"><span class="feature-icon" aria-hidden="true">🔥</span><h3><span data-l="es">Modo Gallinero</span><span data-l="en">Gallinero mode</span></h3><p data-l="es">Sin items en batalla, level caps y una IA que no perdona.</p><p data-l="en">No items in trainer battles, level caps and an AI that shows no mercy.</p></div>
     </section>
 
     <section class="wrap" aria-labelledby="save-title"><div class="callout textbox">
-      <h2 id="save-title" class="callout-title">💾 Actualiza sin perder tu partida</h2>
-      <!--CONTENT:actualizar-->
+      <h2 id="save-title" class="callout-title"><span data-l="es">💾 Actualiza sin perder tu partida</span><span data-l="en">💾 Update without losing your save</span></h2>
+      <div data-l="es"><!--CONTENT:actualizar--></div>
+      <div data-l="en"><!--CONTENT:actualizar.en--></div>
     </div></section>
 
     <section id="novedades" class="wrap section">
       <div class="section-head">
-        <h2>Novedades</h2>
-        <p class="muted"><!--VERSION_COUNT--> versiones publicadas · lo más reciente arriba</p>
+        <h2><span data-l="es">Novedades</span><span data-l="en">Changelog</span></h2>
+        <p class="muted"><!--VERSION_COUNT--> <span data-l="es">versiones publicadas · lo más reciente arriba</span><span data-l="en">versions released · newest first · notes in Spanish</span></p>
       </div>
       <div class="timeline">
         <!--CHANGELOG-->
       </div>
     </section>
 
+    <section id="pokedex" class="wrap section">
+      <div class="section-head">
+        <h2>Pokédex</h2>
+        <p class="muted"><span data-l="es">Dónde encontrar cada Pokémon, del #001 al #493</span><span data-l="en">Where to find every Pokémon, #001 to #493</span></p>
+      </div>
+      <div class="dex-controls textbox">
+        <label class="dex-field">
+          <span data-l="es">Buscar</span><span data-l="en">Search</span>
+          <input id="dex-search" type="search" autocomplete="off" data-ph-es="Pokémon, número o lugar…" data-ph-en="Pokémon, number or place…" placeholder="Pokémon, número o lugar…">
+        </label>
+        <label class="dex-field">
+          <span data-l="es">Región</span><span data-l="en">Region</span>
+          <select id="dex-region">
+            <option value="all">Hoenn + Kanto</option>
+            <option value="HOENN">Hoenn</option>
+            <option value="KANTO">Kanto</option>
+          </select>
+        </label>
+        <label class="spoiler-switch">
+          <input id="spoiler-toggle" type="checkbox">
+          <span data-l="es">Mostrar spoilers (legendarios y postgame)</span><span data-l="en">Show spoilers (legendaries and postgame)</span>
+        </label>
+        <p id="dex-count" class="muted small" aria-live="polite"></p>
+      </div>
+      <div class="dex-table-wrap pixel-frame">
+        <table class="dex-table">
+          <thead><tr><th>#</th><th>Pokémon</th><th><span data-l="es">Dónde</span><span data-l="en">Where</span></th></tr></thead>
+          <tbody id="dex-body"><tr><td colspan="3" class="muted">…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="objetos" class="wrap section">
+      <div class="section-head">
+        <h2><span data-l="es">Objetos</span><span data-l="en">Items</span></h2>
+        <p class="muted"><span data-l="es">Piedras, objetos de evolución, inciensos y más</span><span data-l="en">Stones, evolution items, incenses and more</span></p>
+      </div>
+      <div class="items-grid">
+        <div id="items-shop" class="items-shop pixel-frame"></div>
+        <div class="prose">
+          <div data-l="es"><!--CONTENT:objetos--></div>
+          <div data-l="en"><!--CONTENT:objetos.en--></div>
+        </div>
+      </div>
+    </section>
+
     <section id="roadmap" class="wrap section">
       <div class="section-head">
         <h2>Roadmap</h2>
-        <p class="muted">Lo que viene para el Polloverse</p>
+        <p class="muted"><span data-l="es">Lo que viene para el Polloverse</span><span data-l="en">What's next for the Polloverse</span></p>
       </div>
       <div class="roadmap-grid">
         <img class="roadmap-img pixel-frame" src="assets/roadmap.jpg" alt="Roadmap Polloverse: 1.0 Final, La Liga de los Gallos, Islas del Caribe, La Frontera Dominicana y Gran Final Genesis" width="572" height="1024" loading="lazy">
-        <div class="prose"><!--CONTENT:roadmap--></div>
+        <div class="prose">
+          <div data-l="es"><!--CONTENT:roadmap--></div>
+          <div data-l="en"><!--CONTENT:roadmap.en--></div>
+        </div>
       </div>
     </section>
 
     <section id="como-jugar" class="wrap section">
       <div class="section-head">
-        <h2>Cómo jugar</h2>
+        <h2><span data-l="es">Cómo jugar</span><span data-l="en">How to play</span></h2>
       </div>
-      <div class="prose"><!--CONTENT:como-jugar--></div>
+      <div class="prose">
+        <div data-l="es"><!--CONTENT:como-jugar--></div>
+        <div data-l="en"><!--CONTENT:como-jugar.en--></div>
+      </div>
     </section>
   </main>
 
   <footer class="footer">
     <div class="wrap footer-inner">
-      <p>Hecho por <strong>Los Gallos Sin Planes</strong>, para Cake &amp; Others. 🐓</p>
-      <p class="muted small">Proyecto de fans sin fines de lucro. No está afiliado a Nintendo, Game Freak ni The Pokémon Company.</p>
-      <p class="muted small">Sitio actualizado <!--BUILT_AT--> · <a class="link" href="https://github.com/<!--REPO-->">Código en GitHub</a></p>
+      <p><span data-l="es">Hecho por</span><span data-l="en">Made by</span> <strong>Los Gallos Sin Planes</strong><span data-l="es">, para Cake &amp; Others.</span><span data-l="en">, for Cake &amp; Others.</span> 🐓</p>
+      <p class="muted small" data-l="es">Proyecto de fans sin fines de lucro. No está afiliado a Nintendo, Game Freak ni The Pokémon Company.</p>
+      <p class="muted small" data-l="en">A non-profit fan project. Not affiliated with Nintendo, Game Freak or The Pokémon Company.</p>
+      <p class="muted small"><span data-l="es">Sitio actualizado</span><span data-l="en">Site updated</span> <!--BUILT_AT--> · <a class="link" href="https://github.com/<!--REPO-->"><span data-l="es">Código en GitHub</span><span data-l="en">Code on GitHub</span></a></p>
     </div>
   </footer>
 </body>

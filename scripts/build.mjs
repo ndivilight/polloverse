@@ -24,6 +24,8 @@ const DATE_RE = /<!--\s*fecha:\s*(\d{4}-\d{2}-\d{2})\s*-->/i;
 const ROM_RE = /\.(gba|zip|7z|bps|ips|ups)$/i;
 const MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
+const L = (es, en) => `<span data-l="es">${es}</span><span data-l="en">${en}</span>`;
+
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
 function formatDate(iso) {
@@ -60,6 +62,7 @@ function normalize(r) {
     prerelease: r.prerelease,
     url: r.html_url,
     notesHtml: marked.parse(body.replace(DATE_RE, '').trim() || '_Sin notas._'),
+    files: r.assets.filter((a) => ROM_RE.test(a.name)).map((a) => ({ name: a.name, size: a.size, url: a.browser_download_url })),
     rom: rom && {
       name: rom.name,
       size: rom.size,
@@ -72,26 +75,26 @@ function normalize(r) {
 
 function renderLatest(rel) {
   if (!rel) {
-    return `<div class="latest-card textbox"><p class="muted">Todavía no hay versiones publicadas.</p></div>`;
+    return `<div class="latest-card textbox"><p class="muted">${L('Todavía no hay versiones publicadas.', 'No versions released yet.')}</p></div>`;
   }
   const rom = rel.rom;
   return `<div class="latest-card textbox">
   <div class="latest-head">
-    <span class="badge badge-new">Última versión</span>
+    <span class="badge badge-new">${L('Última versión', 'Latest version')}</span>
     <span class="muted">${esc(formatDate(rel.date))}</span>
   </div>
   <h2 class="latest-name">${esc(rel.name)}</h2>
   ${rom ? `<a class="btn btn-primary btn-lg" href="${esc(rom.url)}" download>
-    <span aria-hidden="true">⬇</span> Descargar ROM
+    <span aria-hidden="true">⬇</span> ${L('Descargar ROM', 'Download ROM')}
   </a>
   <p class="file-meta"><code>${esc(rom.name)}</code> · ${esc(formatSize(rom.size))}</p>
-  ${rom.sha256 ? `<p class="hash" title="SHA-256">SHA-256 <code>${esc(rom.sha256)}</code></p>` : ''}` : `<p class="muted">Esta versión no tiene ROM adjunta.</p>`}
-  <a class="link" href="#v-${esc(rel.tag)}">Ver qué cambió →</a>
+  ${rom.sha256 ? `<p class="hash" title="SHA-256">SHA-256 <code>${esc(rom.sha256)}</code></p>` : ''}` : `<p class="muted">${L('Esta versión no tiene ROM adjunta.', 'This version has no ROM attached.')}</p>`}
+  <a class="link" href="#v-${esc(rel.tag)}">${L('Ver qué cambió', 'See what changed')} →</a>
 </div>`;
 }
 
 function renderChangelog(releases, latestTag) {
-  if (!releases.length) return '<p class="muted">Aún no hay versiones.</p>';
+  if (!releases.length) return `<p class="muted">${L('Aún no hay versiones.', 'No versions yet.')}</p>`;
   return releases
     .map((r) => `<article class="release" id="v-${esc(r.tag)}">
   <div class="release-rail" aria-hidden="true"><span class="dot${r.tag === latestTag ? ' dot-live' : ''}"></span></div>
@@ -101,14 +104,14 @@ function renderChangelog(releases, latestTag) {
       <div class="release-meta">
         <time datetime="${esc(r.date)}">${esc(formatDate(r.date))}</time>
         <span class="chip">${esc(r.tag)}</span>
-        ${r.tag === latestTag ? '<span class="badge badge-new">Última</span>' : ''}
+        ${r.tag === latestTag ? `<span class="badge badge-new">${L('Última', 'Latest')}</span>` : ''}
         ${r.prerelease ? '<span class="badge badge-beta">Beta</span>' : ''}
       </div>
     </header>
     <div class="notes">${r.notesHtml}</div>
     <footer class="release-foot">
-      ${r.rom ? `<a class="btn btn-ghost" href="${esc(r.rom.url)}" download>⬇ ${esc(r.rom.name)} <span class="muted">(${esc(formatSize(r.rom.size))})</span></a>` : ''}
-      <a class="link small" href="${esc(r.url)}">Ver en GitHub</a>
+      ${r.files.map((f) => `<a class="btn btn-ghost" href="${esc(f.url)}" download>⬇ ${esc(f.name)} <span class="muted">(${esc(formatSize(f.size))})</span></a>`).join('\n      ')}
+      <a class="link small" href="${esc(r.url)}">${L('Ver en GitHub', 'View on GitHub')}</a>
     </footer>
   </div>
 </article>`)
@@ -149,7 +152,7 @@ async function main() {
   await writeFile(join(DIST, 'index.html'), html);
   await writeFile(
     join(DIST, 'releases.json'),
-    JSON.stringify({ repo: REPO, builtAt, latest: latest?.tag ?? null, releases: releases.map(({ notesHtml, sortKey, ...r }) => r) }, null, 2),
+    JSON.stringify({ repo: REPO, builtAt, latest: latest?.tag ?? null, releases: releases.map(({ notesHtml, sortKey, files, ...r }) => r) }, null, 2),
   );
   console.log(`Built ${releases.length} release(s); latest = ${latest?.tag ?? 'none'}`);
 }
