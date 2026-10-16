@@ -308,3 +308,9 @@ html[data-lang="en"] [data-l="es"] { display: none !important; }
   .dex-table th, .dex-table td { padding: 8px; }
   .dex-name { white-space: normal; }
 }
+
+/* ---------- Credits ---------- */
+.footer .thanks {
+  display: inline-block; margin: 6px 0 10px; padding: 8px 14px;
+  background: rgb(30 10 36 / .55); border-left: var(--px) solid var(--sun);
+}
