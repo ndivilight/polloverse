@@ -250,3 +250,67 @@ h1 { font-family: var(--title); font-size: clamp(1.05rem, 3.2vw, 1.7rem); line-h
   html { scroll-behavior: auto; }
   .latest-card::after { animation: none; }
 }
+
+/* ---------- Language switch (ES/EN) ---------- */
+html[data-lang="es"] [data-l="en"],
+html[data-lang="en"] [data-l="es"] { display: none !important; }
+.lang-toggle {
+  margin-left: 6px; padding: 4px 10px; cursor: pointer;
+  font-family: var(--title); font-size: .62rem; color: var(--plum-900);
+  background: var(--sun); border: 3px solid var(--plum-900);
+  box-shadow: inset 0 -3px 0 #d99a0a, 3px 3px 0 var(--plum-900);
+}
+.lang-toggle:hover { background: #ffe07a; }
+.lang-toggle:active { transform: translate(3px, 3px); box-shadow: inset 0 -3px 0 #d99a0a; }
+
+/* ---------- Pokédex ---------- */
+.dex-controls { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px 18px; align-items: end; margin-bottom: 20px; }
+.dex-field { display: grid; gap: 4px; font-weight: 600; }
+.dex-field input, .dex-field select {
+  font: inherit; color: var(--ink); background: #fff;
+  border: 3px solid var(--ink); padding: 8px 10px; border-radius: 0; width: 100%;
+}
+.dex-field input:focus, .dex-field select:focus { outline: 3px solid var(--teal); outline-offset: 1px; }
+.spoiler-switch { display: flex; align-items: center; gap: 10px; cursor: pointer; grid-column: 1 / -1; }
+.spoiler-switch input { width: 20px; height: 20px; accent-color: var(--magenta); }
+#dex-count { margin: 0; grid-column: 1 / -1; }
+.dex-table-wrap { background: var(--plum-700); max-height: 70vh; overflow: auto; }
+.dex-table { width: 100%; border-collapse: collapse; }
+.dex-table th {
+  position: sticky; top: 0; z-index: 1; text-align: left;
+  background: var(--plum-900); color: var(--sun); padding: 10px 12px; font-weight: 600;
+}
+.dex-table td { padding: 10px 12px; border-top: 3px dashed var(--plum-500); vertical-align: top; }
+.dex-table tbody tr:hover { background: var(--plum-600); }
+.dex-num { color: var(--muted); width: 3.5em; }
+.dex-name { font-weight: 600; white-space: nowrap; }
+.dex-where { list-style: none; margin: 0; padding: 0; }
+.dex-where li { position: relative; padding-left: 18px; margin: 2px 0; }
+.dex-where li::before { content: ▶; position: absolute; left: 0; top: .2em; font-size: .65em; color: var(--orange); }
+.region { font-size: .72rem; letter-spacing: .05em; padding: 0 5px; border: 2px solid var(--plum-900); vertical-align: 1px; }
+.region-hoenn { background: var(--teal); color: var(--plum-900); }
+.region-kanto { background: var(--orange); color: var(--plum-900); }
+.spoiler-hidden { color: var(--muted); font-style: italic; }
+
+/* ---------- Items ---------- */
+.items-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+.items-shop { background: var(--plum-700); padding: 18px 20px; }
+.items-shop h3 { margin: 0 0 4px; color: var(--sun); font-size: 1.2rem; }
+.items-shop h3:not(:first-child) { margin-top: 20px; }
+.items-shop p { margin: 4px 0; }
+.item-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.item-chip { color: var(--text); }
+
+@media (max-width: 860px) {
+  .dex-controls, .items-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .dex-table th, .dex-table td { padding: 8px; }
+  .dex-name { white-space: normal; }
+}
+
+/* ---------- Credits ---------- */
+.footer .thanks {
+  display: inline-block; margin: 6px 0 10px; padding: 8px 14px;
+  background: rgb(30 10 36 / .55); border-left: var(--px) solid var(--sun);
+}

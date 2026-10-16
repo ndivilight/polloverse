@@ -1,6 +1,6 @@
 # 🐓 Pokémon: The Polloverse Dream
 
-Rom hack de Pokémon Emerald por **Freddy Santana** (Los Gallos Sin Planes · Cake & Others).
+Rom hack de Pokémon Emerald por **Los Gallos Sin Planes** (Cake & Others).
 Hoenn + Kanto, 16 gimnasios, Gen 1–4, Modo Gallinero.
 
 **🌐 Sitio:** https://ndivilight.github.io/polloverse/

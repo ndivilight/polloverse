@@ -15,6 +15,10 @@ The site is **https://ndivilight.github.io/polloverse/**. It is a static page, r
 | "Actualiza sin perder tu partida" box | `content/actualizar.md` | Commit to `main` |
 | Roadmap text | `content/roadmap.md` (+ image `site/assets/roadmap.jpg`) | Commit to `main` |
 | "Cómo jugar" section | `content/como-jugar.md` | Commit to `main` |
+| "Objetos" section text | `content/objetos.md` | Commit to `main` |
+| English version of any section | `content/<name>.en.md` (next to the Spanish file) | Commit to `main` |
+| Pokédex + shop lists | `site/data/pokedex.json`, `site/data/items.json` (generated from the game source) | See **F** |
+| ES/EN switch, Pokédex search, spoiler toggle | `site/app.js` | Commit to `main` |
 | Layout, hero, features, footer | `site/index.html`, `site/style.css`, `site/assets/` | Commit to `main` |
 
 **The changelog is NOT a file in the repo.** It is the list of GitHub Releases. Never create a `CHANGELOG.md` and never put patch notes into `content/`.
@@ -35,7 +39,9 @@ scripts/build.mjs             Generator: fetches Releases via GitHub API, render
 site/index.html               Template. Placeholders: <!--LATEST--> <!--CHANGELOG--> <!--CONTENT:name--> <!--BUILT_AT--> <!--VERSION_COUNT--> <!--REPO-->
 site/style.css                Styles (pixel sunset look matching the roadmap art)
 site/assets/                  roadmap.jpg, rooster.png
-content/*.md                  Editable sections. content/<name>.md fills <!--CONTENT:name-->
+content/*.md                  Editable sections. content/<name>.md fills <!--CONTENT:name-->; <name>.en.md is its English version
+site/app.js                   ES/EN switch, Pokédex and items rendering
+site/data/                    pokedex.json, items.json — generated from the game (never hand-edit)
 COMMIT.md                     This file
 README.md                     Human docs (Spanish)
 dist/                         Build output. Git-ignored. Never commit.
@@ -54,6 +60,7 @@ Look at what you were given and pick **one or more**:
 | A fix to an existing version's notes, title or date | **C. Edit a version** |
 | A version that must disappear | **D. Remove a version** (ask first) |
 | New roadmap, install/emulator help, save instructions, or design changes | **E. Edit site content** |
+| A new game build that changed wild Pokémon, gifts or the Genesis shop | **F. Refresh the game data** |
 | Nothing specific ("just update it") | Run **Verify**. If the live site already matches the latest release, report that and stop. |
 
 If you were given patch notes **without** a ROM, or a ROM **without** notes, ask for the missing piece. Exception: a hotfix ROM with a one-line description is enough.
@@ -63,7 +70,10 @@ If you were given patch notes **without** a ROM, or a ROM **without** notes, ask
 ## 3. Conventions (must follow)
 
 ### Language and tone
-- **All visitor-facing text is Spanish** (Dominican, informal: "¡Dale!", "klk"), matching Freddy's voice. Keep his emojis.
+- **The site is bilingual.** Spanish is the default (Dominican, informal: "¡Dale!", "klk") and English is the switch.
+  Every section text has `content/<name>.md` (ES) and `content/<name>.en.md` (EN): change both.
+  Text inside `site/index.html` comes in pairs: `<span data-l="es">…</span><span data-l="en">…</span>`.
+  Release notes (the changelog) stay in Spanish only.
 - Code, tags and file names stay as-is.
 
 ### Tags (`tag_name`)
@@ -173,6 +183,15 @@ gh release delete v1.0.0-rcX -R ndivilight/polloverse --yes --cleanup-tag
 
 ---
 
+### F. Refresh the game data (Pokédex, shop)
+`site/data/*.json` is written by the game repo's wiki tool, so the page always matches the ROM.
+Locations tied to legendaries or the postgame are tagged `"spoiler": true` and stay hidden until the visitor turns spoilers on.
+```bash
+# in the game repo (pokeemerald-expansion, branch polloverse)
+SITE_DATA_DIR=/path/to/polloverse-site/site/data python3 polloverse/tools/make_wiki.py /tmp/wiki.html
+```
+Then commit `site/data/` like task E.
+
 ## 5. Verify (always)
 
 ```bash
@@ -199,6 +218,7 @@ Done when the run concludes `success` and `latest` is the tag you expect (for ta
 - ❌ Don't commit ROMs, saves or `dist/`.
 - ❌ Don't hand-edit the changelog into HTML or Markdown files. Releases are the changelog.
 - ❌ Don't change the ROM file name without being told to.
+- ❌ Don't hand-edit `site/data/*.json`: regenerate them (task F).
 - ❌ Don't reuse, move or delete tags, or delete releases, without explicit confirmation.
 - ❌ Don't modify `.github/workflows/pages.yml` or `scripts/build.mjs` for a content update.
 - ❌ Don't push to any branch other than `main`, and don't force-push.

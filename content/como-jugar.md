@@ -10,4 +10,4 @@ Necesitas un emulador de Game Boy Advance. Descarga la ROM y ábrela desde el em
 [Pizza Boy GBA](https://play.google.com/store/apps/details?id=it.dbtecno.pizzaboygba) o [mGBA](https://mgba.io/downloads.html).
 
 ### 🐞 ¿Encontraste un bug?
-Avísale a Freddy en el grupo con lo que hiciste antes y después del bug, y un screenshot si puedes. También puedes [abrir un issue en GitHub](https://github.com/ndivilight/polloverse/issues).
+Avísanos en el grupo con lo que hiciste antes y después del bug, y un screenshot si puedes. También puedes [abrir un issue en GitHub](https://github.com/ndivilight/polloverse/issues).
