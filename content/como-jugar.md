@@ -12,5 +12,11 @@ Necesitas un emulador de Game Boy Advance. Descarga la ROM y ábrela desde el em
 ### 🐾 Pokémon que te sigue
 Tu primer Pokémon camina detrás de ti. Si tu emulador se pone lento o raro (por ejemplo en Delta), apágalo en **START → OPTION → FOLLOWER: OFF**.
 
+### ✈️ Volar entre Hoenn y Kanto
+En el mapa de **FLY**, presiona **R** para cambiar de región (abajo dice **R:KANTO** o **R:HOENN**). Elige la ciudad y vuela, sin pasar por el ferry. Solo aparecen las ciudades que ya visitaste.
+
+### 📞 ¿Perdido? Llama a Birch
+En el **POKéNAV → MATCH CALL**, llama al **PROF. BIRCH**: te dice tu próximo objetivo y qué MOs puedes usar.
+
 ### 🐞 ¿Encontraste un bug?
 Avísanos en el grupo con lo que hiciste antes y después del bug, y un screenshot si puedes. También puedes [abrir un issue en GitHub](https://github.com/ndivilight/polloverse/issues).
