@@ -9,5 +9,8 @@ Necesitas un emulador de Game Boy Advance. Descarga la ROM y ábrela desde el em
 ### 🤖 Android
 [Pizza Boy GBA](https://play.google.com/store/apps/details?id=it.dbtecno.pizzaboygba) o [mGBA](https://mgba.io/downloads.html).
 
+### 🐾 Pokémon que te sigue
+Tu primer Pokémon camina detrás de ti. Si tu emulador se pone lento o raro (por ejemplo en Delta), apágalo en **START → OPTION → FOLLOWER: OFF**.
+
 ### 🐞 ¿Encontraste un bug?
 Avísanos en el grupo con lo que hiciste antes y después del bug, y un screenshot si puedes. También puedes [abrir un issue en GitHub](https://github.com/ndivilight/polloverse/issues).

@@ -35,7 +35,19 @@
    "Odd Incense",
    "Full Incense",
    "Wave Incense",
-   "Luck Incense"
+   "Luck Incense",
+   "Power Weight",
+   "Power Bracer",
+   "Power Belt",
+   "Power Lens",
+   "Power Band",
+   "Power Anklet",
+   "Pomeg Berry",
+   "Kelpsy Berry",
+   "Qualot Berry",
+   "Hondew Berry",
+   "Grepa Berry",
+   "Tamato Berry"
   ]
  },
  "genesisPostgame": [
