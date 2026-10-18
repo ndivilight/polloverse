@@ -17,7 +17,7 @@ The site is **https://ndivilight.github.io/polloverse/**. It is a static page, r
 | "Cómo jugar" section | `content/como-jugar.md` | Commit to `main` |
 | "Objetos" section text | `content/objetos.md` | Commit to `main` |
 | English version of any section | `content/<name>.en.md` (next to the Spanish file) | Commit to `main` |
-| Pokédex + shop lists | `site/data/pokedex.json`, `site/data/items.json` (generated from the game source) | See **F** |
+| Pokédex + shop lists | `site/data/pokedex.json`, `site/data/items.json` (generated from the game source), sprites in `site/assets/sprites/` | See **F** |
 | ES/EN switch, Pokédex search, spoiler toggle | `site/app.js` | Commit to `main` |
 | Layout, hero, features, footer | `site/index.html`, `site/style.css`, `site/assets/` | Commit to `main` |
 
@@ -36,9 +36,10 @@ The site is **https://ndivilight.github.io/polloverse/**. It is a static page, r
 ```
 .github/workflows/pages.yml   CI: npm ci → node scripts/build.mjs → deploy dist/ to Pages
 scripts/build.mjs             Generator: fetches Releases via GitHub API, renders site/index.html placeholders
+scripts/make_sprites.py       Dev tool: regenerates site/assets/sprites/ from pokeemerald-expansion (not run in CI)
 site/index.html               Template. Placeholders: <!--LATEST--> <!--CHANGELOG--> <!--CONTENT:name--> <!--BUILT_AT--> <!--VERSION_COUNT--> <!--REPO-->
 site/style.css                Styles (pixel sunset look matching the roadmap art)
-site/assets/                  roadmap.jpg, rooster.png
+site/assets/                  roadmap.jpg, rooster.png, sprites/<n>.png (Pokédex sprites)
 content/*.md                  Editable sections. content/<name>.md fills <!--CONTENT:name-->; <name>.en.md is its English version
 site/app.js                   ES/EN switch, Pokédex and items rendering
 site/data/                    pokedex.json, items.json — generated from the game (never hand-edit)
@@ -191,6 +192,12 @@ Locations tied to legendaries or the postgame are tagged `"spoiler": true` and s
 SITE_DATA_DIR=/path/to/polloverse-site/site/data python3 polloverse/tools/make_wiki.py /tmp/wiki.html
 ```
 Then commit `site/data/` like task E.
+
+**Sprites** (`site/assets/sprites/<n>.png`, one per Pokédex number, 64×64 transparent) come from the same pokeemerald-expansion graphics the ROM uses: the first frame of `graphics/pokemon/<species>/anim_front.png` coloured with `normal.pal`. The `*_gba` variants are **not** used by this ROM. Regenerate them only if the Pokédex range or species graphics change:
+```bash
+pip install pillow
+python3 scripts/make_sprites.py /path/to/pokeemerald-expansion   # fails listing any species it can't find
+```
 
 ## 5. Verify (always)
 
