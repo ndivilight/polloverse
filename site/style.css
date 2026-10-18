@@ -206,6 +206,13 @@ h1 { font-family: var(--title); font-size: clamp(1.05rem, 3.2vw, 1.7rem); line-h
 .notes p { margin: 8px 0; }
 .notes blockquote { margin: 10px 0; padding: 6px 12px; border-left: var(--px) solid var(--teal); background: var(--plum-800); }
 .notes code { background: var(--plum-900); padding: 1px 5px; }
+/* Long notes are clipped with a fade until "Ver más" is pressed (app.js adds .is-collapsed). */
+.notes.is-collapsed { max-height: 220px; overflow: hidden; position: relative; }
+.notes.is-collapsed::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 80px; background: linear-gradient(transparent, var(--plum-700)); pointer-events: none; }
+.notes-toggle { display: inline-block; margin-top: 8px; padding: 0; background: none; border: 0; font: inherit; cursor: pointer; }
+.notes-toggle[hidden] { display: none; }
+.notes-toggle[aria-expanded="true"] .when-collapsed,
+.notes-toggle[aria-expanded="false"] .when-expanded { display: none; }
 .release-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 14px; padding-top: 14px; border-top: 3px dashed var(--plum-500); }
 
 /* ---------- Roadmap + prose ---------- */

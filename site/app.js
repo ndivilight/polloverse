@@ -130,8 +130,42 @@
     renderAll();
   }
 
+  // ---------- changelog: "Ver más" on long release notes ----------
+  const NOTES_MAX = 260; // px; notes taller than this start collapsed
+
+  function setNotes(btn, open) {
+    const notes = document.getElementById(btn.getAttribute('aria-controls'));
+    if (!notes) return;
+    notes.classList.toggle('is-collapsed', !open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+
+  function openFromHash() {
+    const id = decodeURIComponent(location.hash.slice(1));
+    if (!id.startsWith('v-')) return;
+    const btn = document.querySelector(`.notes-toggle[aria-controls="${CSS.escape('notes-' + id.slice(2))}"]`);
+    if (btn && !btn.hidden) setNotes(btn, true);
+  }
+
+  function initNotes() {
+    document.querySelectorAll('.notes-toggle').forEach((btn) => {
+      const notes = document.getElementById(btn.getAttribute('aria-controls'));
+      if (!notes || notes.scrollHeight <= NOTES_MAX) return;
+      btn.hidden = false;
+      setNotes(btn, false);
+      btn.addEventListener('click', () => {
+        const open = btn.getAttribute('aria-expanded') !== 'true';
+        setNotes(btn, open);
+        if (!open) btn.closest('.release')?.scrollIntoView({ block: 'nearest' });
+      });
+    });
+    openFromHash();
+    window.addEventListener('hashchange', openFromHash);
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     applyLang();
+    initNotes();
     document.getElementById('lang-toggle')?.addEventListener('click', () => {
       lang = lang === 'es' ? 'en' : 'es';
       store.set('pv-lang', lang);
