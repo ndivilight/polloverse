@@ -18,7 +18,7 @@ The site is **https://ndivilight.github.io/polloverse/**. It is a static page, r
 | "Objetos" section text | `content/objetos.md` | Commit to `main` |
 | English version of any section | `content/<name>.en.md` (next to the Spanish file) | Commit to `main` |
 | Pokédex + shop lists | `site/data/pokedex.json`, `site/data/items.json` (generated from the game source), sprites in `site/assets/sprites/` | See **F** |
-| ES/EN switch, Pokédex search, spoiler toggle | `site/app.js` | Commit to `main` |
+| ES/EN switch, Pokédex search, spoiler toggle, changelog "Ver más" | `site/app.js` | Commit to `main` |
 | Layout, hero, features, footer | `site/index.html`, `site/style.css`, `site/assets/` | Commit to `main` |
 
 **The changelog is NOT a file in the repo.** It is the list of GitHub Releases. Never create a `CHANGELOG.md` and never put patch notes into `content/`.

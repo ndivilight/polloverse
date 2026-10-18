@@ -111,7 +111,10 @@ function renderChangelog(releases, latestTag) {
         ${r.prerelease ? '<span class="badge badge-beta">Beta</span>' : ''}
       </div>
     </header>
-    <div class="notes">${r.notesHtml}</div>
+    <div class="notes" id="notes-${esc(r.tag)}">${r.notesHtml}</div>
+    <button class="notes-toggle link" type="button" aria-expanded="false" aria-controls="notes-${esc(r.tag)}" hidden>
+      <span class="when-collapsed">${L('Ver más', 'Show more')} ▼</span><span class="when-expanded">${L('Ver menos', 'Show less')} ▲</span>
+    </button>
     <footer class="release-foot">
       ${r.files.map((f) => `<a class="btn btn-ghost" href="${esc(f.url)}" download>⬇ ${esc(f.name)} <span class="muted">(${esc(formatSize(f.size))})</span></a>`).join('\n      ')}
       <a class="link small" href="${esc(r.url)}">${L('Ver en GitHub', 'View on GitHub')}</a>
