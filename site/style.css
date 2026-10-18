@@ -283,10 +283,11 @@ html[data-lang="en"] [data-l="es"] { display: none !important; }
 .dex-table td { padding: 10px 12px; border-top: 3px dashed var(--plum-500); vertical-align: top; }
 .dex-table tbody tr:hover { background: var(--plum-600); }
 .dex-num { color: var(--muted); width: 3.5em; }
-.dex-name { font-weight: 600; white-space: nowrap; }
+.dex-name { font-weight: 600; white-space: nowrap; text-align: center; width: 96px; }
+.dex-sprite { display: block; width: 64px; height: 64px; margin: -6px auto 2px; image-rendering: pixelated; }
 .dex-where { list-style: none; margin: 0; padding: 0; }
 .dex-where li { position: relative; padding-left: 18px; margin: 2px 0; }
-.dex-where li::before { content: ▶; position: absolute; left: 0; top: .2em; font-size: .65em; color: var(--orange); }
+.dex-where li::before { content: '▶'; position: absolute; left: 0; top: .2em; font-size: .65em; color: var(--orange); }
 .region { font-size: .72rem; letter-spacing: .05em; padding: 0 5px; border: 2px solid var(--plum-900); vertical-align: 1px; }
 .region-hoenn { background: var(--teal); color: var(--plum-900); }
 .region-kanto { background: var(--orange); color: var(--plum-900); }

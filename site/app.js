@@ -83,7 +83,7 @@
         && !mon.other.some((o) => (spoilers || !o.spoiler) && o.text.includes(`(${region})`))) continue;
       if (q && !searchText(mon).includes(q)) continue;
       shown++;
-      rows.push(`<tr><td class="dex-num">${String(mon.n).padStart(3, '0')}</td><td class="dex-name">${esc(mon.name)}</td>`
+      rows.push(`<tr><td class="dex-num">${String(mon.n).padStart(3, '0')}</td><td class="dex-name"><img class="dex-sprite" src="assets/sprites/${mon.n}.png" width="64" height="64" loading="lazy" alt="">${esc(mon.name)}</td>`
         + `<td><ul class="dex-where">${placeList(mon).map((p) => `<li>${p}</li>`).join('')}</ul></td></tr>`);
     }
     body.innerHTML = rows.join('') || `<tr><td colspan="3" class="muted">${esc(T[lang].none)}</td></tr>`;
