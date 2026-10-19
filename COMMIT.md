@@ -74,7 +74,9 @@ If you were given patch notes **without** a ROM, or a ROM **without** notes, ask
 - **The site is bilingual.** Spanish is the default (Dominican, informal: "¡Dale!", "klk") and English is the switch.
   Every section text has `content/<name>.md` (ES) and `content/<name>.en.md` (EN): change both.
   Text inside `site/index.html` comes in pairs: `<span data-l="es">…</span><span data-l="en">…</span>`.
-  Release notes (the changelog) stay in Spanish only.
+  Release notes (the changelog) are bilingual too: Spanish first, then the English version after `<!-- en -->`,
+  and the English title in `<!-- title-en: … -->` (see **Release body** below). A release without them shows its
+  Spanish title and notes in both languages.
 - Code, tags and file names stay as-is.
 
 ### Tags (`tag_name`)
@@ -114,9 +116,24 @@ GitHub-flavored Markdown. Template:
 - Qué se añadió.
 
 💾 Mismo nombre de archivo: reemplaza tu `.gba` y dale a **CONTINUAR**. ¡Dale! 💪
+
+<!-- title-en: 1.0.0 RC6 · Short English title -->
+<!-- en -->
+🐓 **Short summary of the version** (optional)
+
+### 🔧 Fixes
+- **Fixed:** what was broken and how it looks now.
+
+### 🧭 New
+- What was added.
+
+💾 Same file name: replace your `.gba` and press **CONTINUE**. Let's go! 💪
 ```
 
 Rules:
+- Everything after `<!-- en -->` is the English version (shown when the visitor switches to EN); everything before it
+  is the Spanish version. `<!-- title-en: … -->` (anywhere in the body) is the English title. Keep both versions
+  saying the same thing.
 - `<!-- fecha: YYYY-MM-DD -->` on the first line sets the date shown on the site. Use the date the build was actually released (e.g. the date of the source message). Without it, the publish date is used.
 - Convert WhatsApp formatting: `*bold*` → `**bold**`, `_italic_` → `*italic*`, `•` bullets → `- `.
 - Lists render with ▶ bullets. `###` headings render in yellow. Don't use `#`/`##`.

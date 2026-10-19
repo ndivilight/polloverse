@@ -10,9 +10,10 @@
 import { cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { marked } from 'marked';
 
-const ROOT = new URL('..', import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL('..', import.meta.url)); // works on Windows too
 const SITE = join(ROOT, 'site');
 const CONTENT = join(ROOT, 'content');
 const DIST = join(ROOT, 'dist');
@@ -21,6 +22,10 @@ const TOKEN = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
 
 // Optional line in a release body to set its date: <!-- fecha: 2026-10-12 -->
 const DATE_RE = /<!--\s*fecha:\s*(\d{4}-\d{2}-\d{2})\s*-->/i;
+// Optional English version of a release: its title in <!-- title-en: ... --> and its notes after <!-- en -->.
+// Without them the Spanish title/notes show in both languages.
+const TITLE_EN_RE = /<!--\s*title-en:\s*(.*?)\s*-->/i;
+const EN_RE = /<!--\s*en\s*-->/i;
 const ROM_RE = /\.(gba|zip|7z|bps|ips|ups)$/i;
 const MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
@@ -53,16 +58,20 @@ async function fetchReleases() {
 function normalize(r) {
   const body = r.body || '';
   const date = body.match(DATE_RE)?.[1] || r.published_at || r.created_at;
+  const [es, ...en] = body.replace(DATE_RE, '').replace(TITLE_EN_RE, '').split(EN_RE);
+  const esHtml = marked.parse(es.trim() || '_Sin notas._');
+  const enText = en.join('\n').trim();
   // The big button is the ready-to-play .gba; a .bps patch is only listed next to it.
   const rom = r.assets.find((a) => /\.gba$/i.test(a.name)) || r.assets.find((a) => ROM_RE.test(a.name)) || r.assets[0] || null;
   return {
     tag: r.tag_name,
     name: r.name || r.tag_name,
+    nameEn: body.match(TITLE_EN_RE)?.[1] || null,
     date: date.slice(0, 10),
     sortKey: `${date.slice(0, 10)}|${r.published_at || r.created_at}`,
     prerelease: r.prerelease,
     url: r.html_url,
-    notesHtml: marked.parse(body.replace(DATE_RE, '').trim() || '_Sin notas._'),
+    notesHtml: enText ? `<div data-l="es">${esHtml}</div><div data-l="en">${marked.parse(enText)}</div>` : esHtml,
     files: r.assets.filter((a) => ROM_RE.test(a.name))
       .sort((x, y) => Number(!/\.gba$/i.test(x.name)) - Number(!/\.gba$/i.test(y.name)))
       .map((a) => ({ name: a.name, size: a.size, url: a.browser_download_url })),
@@ -76,6 +85,9 @@ function normalize(r) {
   };
 }
 
+// Release title in the visitor's language (Spanish when there is no English title)
+const relName = (r) => (r.nameEn ? L(esc(r.name), esc(r.nameEn)) : esc(r.name));
+
 function renderLatest(rel) {
   if (!rel) {
     return `<div class="latest-card textbox"><p class="muted">${L('Todavía no hay versiones publicadas.', 'No versions released yet.')}</p></div>`;
@@ -86,7 +98,7 @@ function renderLatest(rel) {
     <span class="badge badge-new">${L('Última versión', 'Latest version')}</span>
     <span class="muted">${esc(formatDate(rel.date))}</span>
   </div>
-  <h2 class="latest-name">${esc(rel.name)}</h2>
+  <h2 class="latest-name">${relName(rel)}</h2>
   ${rom ? `<a class="btn btn-primary btn-lg" href="${esc(rom.url)}" download>
     <span aria-hidden="true">⬇</span> ${L('Descargar ROM', 'Download ROM')}
   </a>
@@ -103,7 +115,7 @@ function renderChangelog(releases, latestTag) {
   <div class="release-rail" aria-hidden="true"><span class="dot${r.tag === latestTag ? ' dot-live' : ''}"></span></div>
   <div class="release-body pixel-frame">
     <header class="release-head">
-      <h3><a href="#v-${esc(r.tag)}">${esc(r.name)}</a></h3>
+      <h3><a href="#v-${esc(r.tag)}">${relName(r)}</a></h3>
       <div class="release-meta">
         <time datetime="${esc(r.date)}">${esc(formatDate(r.date))}</time>
         <span class="chip">${esc(r.tag)}</span>
