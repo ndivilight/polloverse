@@ -1,0 +1,39 @@
+name: WhatsApp announcement
+
+# Prepares the Corral Studios channel post for a newly published release and
+# uploads it as the "whatsapp-message" artifact. GitHub cannot reach WhatsApp
+# directly: the relay running next to the WhatsApp bridge (whatsapp-mcp,
+# `npm run relay`) polls for successful runs of this workflow and posts them.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to announce (leave empty for a mock test post)
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  message:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Build message
+        run: node scripts/whatsapp-message.mjs "${TAG:---mock}" >> "$GITHUB_STEP_SUMMARY"
+        env:
+          TAG: ${{ github.event.release.tag_name || inputs.tag }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: whatsapp-message
+          path: out/whatsapp/message.json
+          retention-days: 7
