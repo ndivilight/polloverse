@@ -1,0 +1,1 @@
+Every new version, fix or DLC is announced first on the **Corral Studios** channel, with the full list of changes and the download link (in Spanish). Follow it and turn on the 🔔 so you don't miss anything.

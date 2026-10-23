@@ -2,11 +2,16 @@
 // The workflow uploads it as an artifact; a relay next to the WhatsApp bridge
 // picks it up and posts it to the Corral Studios channel.
 //
+// The post body is the release's <!-- whatsapp ... --> block when it has one
+// (already in WhatsApp format, used as-is), else its Spanish notes converted.
+// Header and links are always added. Format rules: WHATSAPP.md.
+//
 // Usage:
 //   node scripts/whatsapp-message.mjs <tag>     announce that release
 //   node scripts/whatsapp-message.mjs --mock    a made-up release, for testing the pipeline
+//   node scripts/whatsapp-message.mjs --file notes.md   preview the post for notes not yet published
 
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 
 const REPO = process.env.GITHUB_REPOSITORY || 'ndivilight/polloverse';
 const TOKEN = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
@@ -33,6 +38,9 @@ const MOCK = {
 <!-- en -->
 English notes are not posted.`,
 };
+
+// Optional hand-written post inside the release body; invisible on GitHub and the site.
+export const WHATSAPP_RE = /<!--\s*whatsapp\s*\n([\s\S]*?)-->/i;
 
 // GitHub Markdown -> WhatsApp formatting. Only the Spanish half is posted.
 export function toWhatsApp(md) {
@@ -61,15 +69,17 @@ async function fetchRelease(tag) {
 }
 
 const arg = process.argv[2];
-if (!arg) throw new Error('usage: whatsapp-message.mjs <tag> | --mock');
+if (!arg) throw new Error('usage: whatsapp-message.mjs <tag> | --mock | --file <notes.md>');
 const mock = arg === '--mock';
-const rel = mock ? MOCK : await fetchRelease(arg);
+const rel = mock ? MOCK
+  : arg === '--file' ? { tag_name: 'preview', body: await readFile(process.argv[3], 'utf8'), html_url: `https://github.com/${REPO}/releases` }
+  : await fetchRelease(arg);
 
 const text = [
   mock ? '⚠️ *MENSAJE DE PRUEBA*: ignoren esto, estamos probando los anuncios automáticos.\n' : '',
   `🐓 *¡Nueva versión de POKÉMON: THE POLLOVERSE DREAM!* 🔥`,
   '',
-  toWhatsApp(rel.body || rel.name || rel.tag_name),
+  (rel.body || '').match(WHATSAPP_RE)?.[1].trim() || toWhatsApp(rel.body || rel.name || rel.tag_name),
   '',
   `⬇️ Descárgala aquí: ${SITE}`,
   `📝 Notas completas: ${rel.html_url}`,

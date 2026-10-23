@@ -22,6 +22,7 @@ El sitio se reconstruye y publica solo (GitHub Actions → GitHub Pages) cada ve
 | Diseño de la página | `site/index.html`, `site/style.css`, `site/assets/` |
 | Generador | `scripts/build.mjs` |
 | Deploy automático | `.github/workflows/pages.yml` |
+| Aviso en el canal de WhatsApp | `.github/workflows/whatsapp.yml`, `scripts/whatsapp-message.mjs`, formato en [`WHATSAPP.md`](WHATSAPP.md) |
 
 Las ROMs van como archivos adjuntos de los Releases (no dentro del código), así el repo se mantiene liviano.
 
@@ -33,7 +34,7 @@ Las ROMs van como archivos adjuntos de los Releases (no dentro del código), as�
 3. **Título:** el nombre que se verá en la página, por ejemplo `1.0.0 RC6`.
 4. **Descripción:** las patch notes en Markdown.
 5. Arrastra el `.gba` a la caja de archivos adjuntos. **Usa el mismo nombre de archivo que la versión anterior** para que las partidas sigan funcionando.
-6. Dale a **Publish release**. En 1–2 minutos el sitio muestra la nueva versión como la última.
+6. Dale a **Publish release**. En 1–2 minutos el sitio muestra la nueva versión como la última, y el canal de WhatsApp **Corral Studios** recibe el aviso con los cambios.
 
 ### Desde la terminal
 ```bash
@@ -44,7 +45,8 @@ gh release create v1.0.0-rc6 PolloverseDream_1.0.0_RC5.gba \
 ### Detalles
 - **Fecha:** el sitio usa la fecha de publicación. Para otra fecha, pon `<!-- fecha: 2026-10-20 -->` en la descripción.
 - **Betas:** marca *Set as a pre-release* y saldrá con la etiqueta *Beta*. No cuenta como "última versión".
-- **Corregir notas:** edita el Release y el sitio se actualiza solo.
+- **Corregir notas:** edita el Release y el sitio se actualiza solo. El aviso de WhatsApp **no** se vuelve a mandar.
+- **Aviso de WhatsApp:** se arma solo con las notas en español. Para escribirlo a mano, pon un bloque `<!-- whatsapp … -->` en la descripción. Mira [`WHATSAPP.md`](WHATSAPP.md). Para ver cómo va a quedar antes de publicar: `node scripts/whatsapp-message.mjs --file notas.md`.
 
 ## Actualizar con un agente de IA (Claude, ChatGPT, etc.)
 

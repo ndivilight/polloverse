@@ -26,6 +26,8 @@ const DATE_RE = /<!--\s*fecha:\s*(\d{4}-\d{2}-\d{2})\s*-->/i;
 // Without them the Spanish title/notes show in both languages.
 const TITLE_EN_RE = /<!--\s*title-en:\s*(.*?)\s*-->/i;
 const EN_RE = /<!--\s*en\s*-->/i;
+// Optional hand-written WhatsApp post (scripts/whatsapp-message.mjs); never shown on the site.
+const WHATSAPP_RE = /<!--\s*whatsapp\s*\n[\s\S]*?-->/i;
 const ROM_RE = /\.(gba|zip|7z|bps|ips|ups)$/i;
 const MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
@@ -58,7 +60,7 @@ async function fetchReleases() {
 function normalize(r) {
   const body = r.body || '';
   const date = body.match(DATE_RE)?.[1] || r.published_at || r.created_at;
-  const [es, ...en] = body.replace(DATE_RE, '').replace(TITLE_EN_RE, '').split(EN_RE);
+  const [es, ...en] = body.replace(WHATSAPP_RE, '').replace(DATE_RE, '').replace(TITLE_EN_RE, '').split(EN_RE);
   const esHtml = marked.parse(es.trim() || '_Sin notas._');
   const enText = en.join('\n').trim();
   // The big button is the ready-to-play .gba; a .bps patch is only listed next to it.
