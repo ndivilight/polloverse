@@ -28,6 +28,8 @@ const TITLE_EN_RE = /<!--\s*title-en:\s*(.*?)\s*-->/i;
 const EN_RE = /<!--\s*en\s*-->/i;
 // Optional hand-written WhatsApp post (scripts/whatsapp-message.mjs); never shown on the site.
 const WHATSAPP_RE = /<!--\s*whatsapp\s*\n[\s\S]*?-->/i;
+// Test releases for the WhatsApp dry run (WHATSAPP.md §8); never shown on the site.
+const DRY_RUN_RE = /dry-?run/i;
 const ROM_RE = /\.(gba|zip|7z|bps|ips|ups)$/i;
 const MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
@@ -150,7 +152,7 @@ async function renderContent(html) {
 
 async function main() {
   const releases = (await fetchReleases())
-    .filter((r) => !r.draft)
+    .filter((r) => !r.draft && !DRY_RUN_RE.test(r.tag_name))
     .map(normalize)
     .sort((a, b) => b.sortKey.localeCompare(a.sortKey));
 
