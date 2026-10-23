@@ -13,6 +13,8 @@ The site is **https://ndivilight.github.io/polloverse/**. It is a static page, r
 | "Última versión" card + download button | The newest **non-prerelease** GitHub Release that has a ROM asset | Create a Release |
 | "Novedades" changelog (every version) | **All** GitHub Releases: title, body (Markdown), attached ROM | Create or edit Releases |
 | "Actualiza sin perder tu partida" box | `content/actualizar.md` | Commit to `main` |
+| "Canal de WhatsApp" box (+ green button under the download card) | `content/canal.md`; the channel link is in `site/index.html` | Commit to `main` |
+| Post on the **Corral Studios WhatsApp channel** | Sent automatically when a release is **published**: its Spanish notes, or its `<!-- whatsapp -->` block | Write the release notes; follow **WHATSAPP.md** |
 | Roadmap text | `content/roadmap.md` (+ image `site/assets/roadmap.jpg`) | Commit to `main` |
 | "Cómo jugar" section | `content/como-jugar.md` | Commit to `main` |
 | "Objetos" section text | `content/objetos.md` | Commit to `main` |
@@ -30,12 +32,18 @@ The site is **https://ndivilight.github.io/polloverse/**. It is a static page, r
 - release `published` / `edited` / `deleted` / `unpublished` / `released` / `prereleased` → redeploy
 - manual: `gh workflow run "Deploy site" --ref main`
 
+### WhatsApp channel trigger (`.github/workflows/whatsapp.yml`)
+- release `published` → the post is built and sent to the Corral Studios channel **once**. Edits never post again.
+- Format, the optional `<!-- whatsapp -->` block, previewing and manual re-posting: **WHATSAPP.md**.
+
 > ⚠️ **Uploading or replacing a release asset by itself does NOT trigger a deploy.** After `gh release upload`, always run the manual trigger.
 
 ### Repository map
 ```
 .github/workflows/pages.yml   CI: npm ci → node scripts/build.mjs → deploy dist/ to Pages
+.github/workflows/whatsapp.yml CI: on release published → builds the WhatsApp channel post (artifact for the relay)
 scripts/build.mjs             Generator: fetches Releases via GitHub API, renders site/index.html placeholders
+scripts/whatsapp-message.mjs  Builds the WhatsApp post for a release; `--file notes.md` previews it
 scripts/make_sprites.py       Dev tool: regenerates site/assets/sprites/ from pokeemerald-expansion (not run in CI)
 site/index.html               Template. Placeholders: <!--LATEST--> <!--CHANGELOG--> <!--CONTENT:name--> <!--BUILT_AT--> <!--VERSION_COUNT--> <!--REPO-->
 site/style.css                Styles (pixel sunset look matching the roadmap art)
@@ -44,6 +52,7 @@ content/*.md                  Editable sections. content/<name>.md fills <!--CON
 site/app.js                   ES/EN switch, Pokédex and items rendering
 site/data/                    pokedex.json, items.json — generated from the game (never hand-edit)
 COMMIT.md                     This file
+WHATSAPP.md                   How WhatsApp channel posts are formatted (read for tasks A–C)
 README.md                     Human docs (Spanish)
 dist/                         Build output. Git-ignored. Never commit.
 ```
@@ -139,6 +148,7 @@ Rules:
 - Lists render with ▶ bullets. `###` headings render in yellow. Don't use `#`/`##`.
 - Don't invent features. Only write what the source says. If unsure, leave it out.
 - No @mentions or phone numbers from chats.
+- Publishing also posts to the WhatsApp channel. The Spanish half is converted automatically. If it's long or should read differently, add a `<!-- whatsapp … -->` block (before `<!-- en -->`). The rules are in **WHATSAPP.md**.
 
 ### Commits (task E)
 - Branch: commit directly to `main`. Small, focused commits.
@@ -159,8 +169,12 @@ All commands use the `gh` CLI, authenticated as an account with **write access**
    mkdir -p /tmp/polloverse-rel && cp "<received-file>" "/tmp/polloverse-rel/PolloverseDream_1.0.0_RC5.gba"
    ```
    Sanity check: GBA ROMs are usually 16 or 32 MB (`ls -l`), and bytes 0xA0–0xAB hold the game title (`dd if=FILE bs=1 skip=160 count=12 2>/dev/null`, expect `POKEMON EMER`).
-4. Write the notes to `/tmp/polloverse-rel/notes.md` using the template above.
-5. Create the release (this triggers the deploy):
+4. Write the notes to `/tmp/polloverse-rel/notes.md` using the template above. Then preview the WhatsApp post (it goes out the moment you publish, and it can't be edited):
+   ```bash
+   node scripts/whatsapp-message.mjs --file /tmp/polloverse-rel/notes.md
+   ```
+   If it's too long or reads badly, add a `<!-- whatsapp … -->` block (**WHATSAPP.md**) and preview again.
+5. Create the release (this triggers the deploy **and the WhatsApp post**):
    ```bash
    gh release create v1.0.0-rc6 "/tmp/polloverse-rel/PolloverseDream_1.0.0_RC5.gba" \
      -R ndivilight/polloverse --title "1.0.0 RC6" --notes-file /tmp/polloverse-rel/notes.md --latest
@@ -180,7 +194,7 @@ gh workflow run "Deploy site" -R ndivilight/polloverse --ref main   # required: 
 gh release view v1.0.0-rc5 -R ndivilight/polloverse --json body --jq .body > /tmp/notes.md   # edit this file
 gh release edit v1.0.0-rc5 -R ndivilight/polloverse --notes-file /tmp/notes.md [--title "…"]
 ```
-The `edited` event redeploys. An edit that changes nothing does **not** fire an event.
+The `edited` event redeploys. An edit that changes nothing does **not** fire an event. Edits are **not** posted to WhatsApp again. To re-post, see WHATSAPP.md §7, and only if asked.
 
 ### D. Remove a version
 Destructive: download links break for everyone. **Confirm with the person you're working for before running.**
@@ -244,8 +258,9 @@ Done when the run concludes `success` and `latest` is the tag you expect (for ta
 - ❌ Don't change the ROM file name without being told to.
 - ❌ Don't hand-edit `site/data/*.json`: regenerate them (task F).
 - ❌ Don't reuse, move or delete tags, or delete releases, without explicit confirmation.
-- ❌ Don't modify `.github/workflows/pages.yml` or `scripts/build.mjs` for a content update.
+- ❌ Don't modify `.github/workflows/*.yml`, `scripts/build.mjs` or `scripts/whatsapp-message.mjs` for a content update.
+- ❌ Don't run the WhatsApp workflow by hand (mock or re-post) unless asked. It posts to a public channel.
 - ❌ Don't push to any branch other than `main`, and don't force-push.
 
 ## 7. Report back
-Tell the person: what you published or changed (tag, title, file name), the live URL `https://ndivilight.github.io/polloverse/`, the direct download link (`https://github.com/ndivilight/polloverse/releases/download/<tag>/<file>`), and the Verify result.
+Tell the person: what you published or changed (tag, title, file name), the live URL `https://ndivilight.github.io/polloverse/`, the direct download link (`https://github.com/ndivilight/polloverse/releases/download/<tag>/<file>`), the Verify result, and (task A) whether the "WhatsApp announcement" run succeeded.
