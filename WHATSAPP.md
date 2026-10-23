@@ -142,3 +142,36 @@ gh workflow run whatsapp.yml -R ndivilight/polloverse --ref main
 ```
 
 Check that it went out: the "WhatsApp announcement" run must end in `success` (`gh run list -R ndivilight/polloverse -w whatsapp.yml -L 1`). The post shows up in the channel within about a minute. If the run succeeded but nothing was posted, the relay or the WhatsApp bridge is down. That runs on divilight's server, so tell the person you work for and don't retry in a loop.
+
+## 8. Dry run: test the whole release flow without going public
+
+A release whose tag contains **`dryrun`** goes through the real pipeline: the release `published` event, both workflows, the artifact, the relay and the WhatsApp bridge. Two things are different:
+- the site build **skips** it, so it never shows on the page;
+- the relay sends the post to divilight's **test chat** with a `🧪 DRY RUN` label, **never** to the channel. If no test chat is set up, it skips the post.
+
+Run it when someone asks you to check that publishing works, or after changing the workflows or the scripts:
+
+```bash
+# 1. Use real-looking notes (here, a copy of the latest release's) and preview them
+gh release view "$(gh release list -R ndivilight/polloverse -L 1 --json tagName --jq '.[0].tagName')" \
+  -R ndivilight/polloverse --json body --jq .body > /tmp/dryrun-notes.md
+node scripts/whatsapp-message.mjs --file /tmp/dryrun-notes.md
+
+# 2. Publish the test release: a pre-release, never marked latest, with no ROM attached
+gh release create v0.0.0-dryrun -R ndivilight/polloverse --prerelease --latest=false \
+  --title "Dry run" --notes-file /tmp/dryrun-notes.md
+
+# 3. Both runs must succeed
+sleep 15
+gh run list -R ndivilight/polloverse -L 3 --json workflowName,event,conclusion,headBranch
+
+# 4. The site must not list it
+curl -s https://ndivilight.github.io/polloverse/releases.json | grep -c dryrun   # expect 0
+
+# 5. Ask the person you work for whether the 🧪 DRY RUN post reached the test chat (about a minute after step 3)
+
+# 6. Clean up, always
+gh release delete v0.0.0-dryrun -R ndivilight/polloverse --yes --cleanup-tag
+```
+
+Never use a `dryrun` tag for a real version, and never leave the test release up.

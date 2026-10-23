@@ -86,5 +86,7 @@ const text = [
 ].join('\n').trim();
 
 await mkdir(OUT, { recursive: true });
-await writeFile(OUT + 'message.json', JSON.stringify({ tag: rel.tag_name, mock, text }, null, 2));
+// A dry-run tag goes through the whole pipeline, but the relay sends it to a test chat, never to the channel.
+const dryRun = /dry-?run/i.test(rel.tag_name);
+await writeFile(OUT + 'message.json', JSON.stringify({ tag: rel.tag_name, mock, dryRun, text }, null, 2));
 console.log(text);

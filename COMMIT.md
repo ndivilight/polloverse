@@ -35,6 +35,7 @@ The site is **https://ndivilight.github.io/polloverse/**. It is a static page, r
 ### WhatsApp channel trigger (`.github/workflows/whatsapp.yml`)
 - release `published` → the post is built and sent to the Corral Studios channel **once**. Edits never post again.
 - Format, the optional `<!-- whatsapp -->` block, previewing and manual re-posting: **WHATSAPP.md**.
+- To test publishing end to end without going public: the **dry run** in WHATSAPP.md §8. Any tag containing `dryrun` is hidden from the site, and its post goes to a test chat instead of the channel.
 
 > ⚠️ **Uploading or replacing a release asset by itself does NOT trigger a deploy.** After `gh release upload`, always run the manual trigger.
 
@@ -71,6 +72,7 @@ Look at what you were given and pick **one or more**:
 | A version that must disappear | **D. Remove a version** (ask first) |
 | New roadmap, install/emulator help, save instructions, or design changes | **E. Edit site content** |
 | A new game build that changed wild Pokémon, gifts or the Genesis shop | **F. Refresh the game data** |
+| "Test that publishing works" / a dry run | WHATSAPP.md §8 (Dry run) |
 | Nothing specific ("just update it") | Run **Verify**. If the live site already matches the latest release, report that and stop. |
 
 If you were given patch notes **without** a ROM, or a ROM **without** notes, ask for the missing piece. Exception: a hotfix ROM with a one-line description is enough.
