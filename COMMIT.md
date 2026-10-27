@@ -226,6 +226,8 @@ SITE_DATA_DIR=/path/to/polloverse-site/site/data python3 polloverse/tools/make_w
 ```
 Then commit `site/data/` like task E.
 
+**Place filter** ("Lugar" in the Pokédex) is built in the browser from `wild[].map` and the start of each `other[].text`; nothing extra is stored in the JSON. `PLACE_GROUPS` in `site/app.js` folds floors and rooms into one place ("Granite Cave B1f" → Granite Cave) and buildings into their town ("Devon Corp. 2F" → Rustboro City). After refreshing the data, open the dropdown. If a new dungeon shows up once per floor, add its prefix to `PLACE_GROUPS`.
+
 **Sprites** (`site/assets/sprites/<n>.png`, one per Pokédex number, 64×64 transparent) come from the same pokeemerald-expansion graphics the ROM uses: the first frame of `graphics/pokemon/<species>/anim_front.png` coloured with `normal.pal`. The `*_gba` variants are **not** used by this ROM. Regenerate them only if the Pokédex range or species graphics change:
 ```bash
 pip install pillow
