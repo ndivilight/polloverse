@@ -63,36 +63,50 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
 .nav a:hover { color: #fff; }
 .nav a:hover::before { visibility: visible; }
 
-/* ---------- Hero: stepped pixel sunset ---------- */
+/* ---------- Hero: the whole saga in one panorama ----------
+   The banner runs left to right like the story: the first coast, the LIGA DE LOS GALLOS arena, the seven
+   islands under the HURACÁN, and LA FRONTERA on the horizon. A slow pan travels along it. */
 .hero {
   position: relative;
   overflow: hidden;
-  padding: 56px 0 120px;
-  background:
-    /* sea */
-    linear-gradient(180deg, transparent 0 calc(100% - 96px), var(--teal) calc(100% - 96px) calc(100% - 64px), #0aa7a3 calc(100% - 64px) calc(100% - 40px), var(--teal-dark) calc(100% - 40px)),
-    /* banded sky */
-    linear-gradient(180deg,
-      var(--plum-500) 0 14%, #8e2b62 14% 26%, var(--magenta) 26% 38%,
-      #d8434d 38% 50%, var(--red) 50% 62%, var(--orange) 62% 76%, #ff9a26 76% 100%);
+  padding: 64px 0 140px;
+  background-color: var(--plum-700);
+  background-image:
+    linear-gradient(180deg, rgb(30 10 36 / .55) 0%, rgb(30 10 36 / .12) 38%, rgb(30 10 36 / .2) 70%, rgb(30 10 36 / .7) 100%),
+    url(assets/saga-banner.jpg);
+  background-size: cover, auto 100%;
+  background-position: center, 0% 50%;
+  background-repeat: no-repeat;
+  animation: saga-pan 60s ease-in-out infinite alternate;
 }
-/* the sun, in horizontal pixel stripes */
-.hero::before {
-  content: '';
-  position: absolute; left: 50%; bottom: 72px;
-  width: 340px; height: 170px; transform: translateX(-50%);
-  border-radius: 170px 170px 0 0;
-  background: repeating-linear-gradient(180deg, var(--sun) 0 14px, #ffd85a 14px 18px);
-  opacity: .9;
+@keyframes saga-pan { to { background-position: center, 100% 50%; } }
+/* twinkling sea sparkles, in pixel squares */
+.hero-sparkles {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    radial-gradient(circle, #fff 0 2px, transparent 3px),
+    radial-gradient(circle, #b7fff7 0 2px, transparent 3px),
+    radial-gradient(circle, #ffe9a0 0 2px, transparent 3px);
+  background-size: 180px 140px, 260px 190px, 330px 230px;
+  background-position: 20px 60%, 120px 75%, 60px 85%;
+  mask-image: linear-gradient(180deg, transparent 45%, #000 70%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 45%, #000 70%);
+  animation: twinkle 3.2s steps(4) infinite;
 }
-/* sea sparkle lines */
+@keyframes twinkle {
+  0%, 100% { opacity: .2; }
+  50% { opacity: .85; }
+}
+/* the shore at the bottom, with a slow shimmering wave line */
 .hero::after {
   content: '';
-  position: absolute; left: 0; right: 0; bottom: 18px; height: 40px;
+  position: absolute; left: 0; right: 0; bottom: 0; height: 22px;
   background:
-    linear-gradient(90deg, transparent 0 20%, #7ff3e9 20% 24%, transparent 24% 60%, #7ff3e9 60% 63%, transparent 63%) 0 6px / 100% 4px no-repeat,
-    linear-gradient(90deg, transparent 0 40%, #b7fff7 40% 43%, transparent 43% 80%, #7ff3e9 80% 84%, transparent 84%) 0 24px / 100% 4px no-repeat;
+    repeating-linear-gradient(90deg, #7ff3e9 0 18px, transparent 18px 60px) 0 4px / 240px 4px repeat-x,
+    linear-gradient(180deg, transparent 0 10px, var(--plum-800) 10px);
+  animation: wave 6s linear infinite;
 }
+@keyframes wave { to { background-position: 240px 4px, 0 0; } }
 .hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1.1fr 1fr; gap: 36px; align-items: center; }
 
 .title-banner {
@@ -103,7 +117,12 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
   padding: 18px 20px 20px;
   text-align: center;
 }
-.hero-rooster { display: block; width: 168px; margin: 0 auto -6px; border: var(--px) solid var(--plum-900); border-bottom: 0; border-radius: 12px 12px 0 0; }
+.hero-rooster {
+  display: block; width: 168px; margin: 0 auto -6px; border: var(--px) solid var(--plum-900); border-bottom: 0; border-radius: 12px 12px 0 0;
+  animation: rooster-bob 1.4s steps(2) infinite; /* the idle bounce of an overworld sprite */
+  transform-origin: 50% 100%;
+}
+@keyframes rooster-bob { 50% { transform: translateY(-4px); } }
 .eyebrow { margin: 0; font-size: .95rem; letter-spacing: .06em; text-transform: uppercase; }
 .eyebrow-sub { margin: 0 0 10px; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 h1 { font-family: var(--title); font-size: clamp(1.05rem, 3.2vw, 1.7rem); line-height: 1.5; margin: 0; text-shadow: 3px 3px 0 var(--plum-900); }
@@ -170,6 +189,46 @@ h1 { font-family: var(--title); font-size: clamp(1.05rem, 3.2vw, 1.7rem); line-h
 .feature-icon { font-size: 1.7rem; }
 .feature h3 { margin: 6px 0 2px; font-size: 1.15rem; color: var(--sun); }
 .feature p { margin: 0; color: var(--muted); font-size: 1rem; }
+
+/* ---------- La saga: the four chapters ---------- */
+.saga { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; counter-reset: saga; }
+.saga-card {
+  position: relative;
+  background: linear-gradient(180deg, var(--plum-600), var(--plum-700) 55%);
+  padding: 18px 16px 20px; text-align: center;
+  transition: transform .2s steps(3), box-shadow .2s;
+}
+.saga-card:hover { transform: translateY(-6px); box-shadow: inset 0 0 0 var(--px) var(--sun), var(--px) calc(var(--px) * 3) 0 0 #0008; }
+.saga-badge {
+  display: block; width: 140px; height: 140px; margin: -4px auto 10px;
+  image-rendering: auto;
+  filter: drop-shadow(4px 4px 0 #0008);
+  animation: badge-float 3s ease-in-out infinite;
+}
+.saga-card:nth-child(2) .saga-badge { animation-delay: -.75s; }
+.saga-card:nth-child(3) .saga-badge { animation-delay: -1.5s; }
+.saga-card:nth-child(4) .saga-badge { animation-delay: -2.25s; }
+@keyframes badge-float { 50% { transform: translateY(-6px); } }
+.saga-num { margin: 0; font-family: var(--title); font-size: .7rem; color: var(--sun); letter-spacing: .08em; }
+.saga-card h3 { margin: 6px 0 6px; font-size: 1.2rem; line-height: 1.2; }
+.saga-card p { margin: 0 0 12px; color: var(--muted); font-size: 1rem; }
+/* the chapter still to come glows like the gate on the poster */
+.saga-next { background: linear-gradient(180deg, #5a2a52, var(--plum-700) 60%); }
+.saga-next::after {
+  content: ''; position: absolute; inset: -6px; pointer-events: none;
+  border: 3px solid var(--sun); opacity: 0;
+  animation: gate-glow 2.4s steps(6) infinite;
+}
+@keyframes gate-glow { 50% { opacity: .75; } }
+
+/* scroll reveal (app.js adds .is-visible); without JavaScript everything just shows */
+.js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .5s ease, transform .5s steps(6); }
+.js .reveal.is-visible { opacity: 1; transform: none; }
+.saga-card.reveal:nth-child(2) { transition-delay: .08s; }
+.saga-card.reveal:nth-child(3) { transition-delay: .16s; }
+.saga-card.reveal:nth-child(4) { transition-delay: .24s; }
+
+.all-versions { margin: 4px 0 0 48px; }
 
 /* ---------- Callout ---------- */
 .callout { margin-top: 40px; }
@@ -247,8 +306,10 @@ h1 { font-family: var(--title); font-size: clamp(1.05rem, 3.2vw, 1.7rem); line-h
 
 @media (max-width: 860px) {
   .hero { padding: 36px 0 112px; }
+  .hero { background-image: linear-gradient(180deg, rgb(30 10 36 / .6) 0%, rgb(30 10 36 / .25) 40%, rgb(30 10 36 / .75) 100%), url(assets/saga-banner-small.jpg); }
   .hero-grid { grid-template-columns: 1fr; gap: 28px; }
   .features { grid-template-columns: repeat(2, 1fr); }
+  .saga { grid-template-columns: repeat(2, 1fr); }
   .roadmap-grid { grid-template-columns: 1fr; }
   .roadmap-img { max-width: 320px; }
   .channel { flex-direction: column; align-items: stretch; gap: 14px; }
@@ -259,11 +320,15 @@ h1 { font-family: var(--title); font-size: clamp(1.05rem, 3.2vw, 1.7rem); line-h
   .nav a { padding: 4px 6px; font-size: .95rem; }
   .textbox { padding: 18px; }
   .btn-lg { font-size: .66rem; }
-  .hero::before { width: 240px; height: 120px; }
+  .saga { grid-template-columns: 1fr; }
+  .saga-card { display: grid; grid-template-columns: 96px 1fr; gap: 12px; align-items: center; text-align: left; }
+  .saga-badge { width: 96px; height: 96px; margin: 0; }
+  .all-versions { margin-left: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .latest-card::after { animation: none; }
+  .latest-card::after, .hero, .hero-sparkles, .hero::after, .hero-rooster, .saga-badge, .saga-next::after { animation: none; }
+  .js .reveal { opacity: 1; transform: none; transition: none; }
 }
 
 /* ---------- Language switch (ES/EN) ---------- */
