@@ -31,6 +31,8 @@ const WHATSAPP_RE = /<!--\s*whatsapp\s*\n[\s\S]*?-->/i;
 // Test releases for the WhatsApp dry run (WHATSAPP.md §8); never shown on the site.
 const DRY_RUN_RE = /dry-?run/i;
 const ROM_RE = /\.(gba|zip|7z|bps|ips|ups)$/i;
+// The changelog shows only the newest releases; older ones stay on GitHub (linked under the timeline).
+const SHOWN_RELEASES = 3;
 const MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
 const L = (es, en) => `<span data-l="es">${es}</span><span data-l="en">${en}</span>`;
@@ -158,11 +160,15 @@ async function main() {
 
   const latest = releases.find((r) => !r.prerelease && r.rom) || releases[0] || null;
   const builtAt = new Date().toISOString();
+  // newest first; the latest download always stays in the list
+  const shown = releases.slice(0, SHOWN_RELEASES);
+  if (latest && !shown.includes(latest)) shown[shown.length - 1] = latest;
 
   let html = await readFile(join(SITE, 'index.html'), 'utf8');
   html = html
     .replace('<!--LATEST-->', renderLatest(latest))
-    .replace('<!--CHANGELOG-->', renderChangelog(releases, latest?.tag))
+    .replace('<!--CHANGELOG-->', renderChangelog(shown, latest?.tag))
+    .replace('<!--SHOWN_COUNT-->', String(shown.length))
     .replaceAll('<!--REPO-->', esc(REPO))
     .replace('<!--BUILT_AT-->', `<time datetime="${builtAt}">${esc(formatDate(builtAt))}</time>`)
     .replace('<!--VERSION_COUNT-->', String(releases.length));

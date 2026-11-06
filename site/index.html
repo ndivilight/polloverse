@@ -6,7 +6,7 @@
   <title>Pokémon: The Polloverse Dream</title>
   <meta name="description" content="Rom hack de Pokémon Emerald por Los Gallos Sin Planes. Hoenn + Kanto, 16 gimnasios, Gen 1–4. Descarga la última versión y mira qué cambió.">
   <meta property="og:title" content="Pokémon: The Polloverse Dream">
-  <meta property="og:description" content="Hoenn + Kanto en un solo juego. Descarga la última versión del rom hack.">
+  <meta property="og:description" content="Hoenn + Kanto, la Liga de los Gallos, las Islas del Caribe y el capítulo final. Descarga la última versión del rom hack.">
   <meta property="og:image" content="assets/roadmap.jpg">
   <meta name="theme-color" content="#34103e">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐓</text></svg>">
@@ -21,6 +21,7 @@
       try { l = l || localStorage.getItem('pv-lang'); } catch (e) {}
       document.documentElement.dataset.lang = l === 'en' ? 'en' : 'es';
       document.documentElement.lang = document.documentElement.dataset.lang;
+      document.documentElement.classList.add('js'); // scroll animations only when the script can reveal them
     })();
   </script>
   <script src="app.js" defer></script>
@@ -31,6 +32,7 @@
       <a class="brand" href="#top"><img src="assets/rooster.png" alt="" width="46" height="35"> Polloverse</a>
       <nav class="nav">
         <a href="#descargar"><span data-l="es">Descargar</span><span data-l="en">Download</span></a>
+        <a href="#saga"><span data-l="es">La saga</span><span data-l="en">The saga</span></a>
         <a href="#novedades"><span data-l="es">Novedades</span><span data-l="en">Changelog</span></a>
         <a href="#pokedex">Pokédex</a>
         <a href="#objetos"><span data-l="es">Objetos</span><span data-l="en">Items</span></a>
@@ -44,6 +46,7 @@
 
   <main id="top">
     <section class="hero">
+      <div class="hero-sparkles" aria-hidden="true"></div>
       <div class="wrap hero-grid">
         <div class="hero-copy">
           <img class="hero-rooster" src="assets/rooster.png" alt="El pollo del Polloverse" width="212" height="160">
@@ -64,10 +67,59 @@
     </section>
 
     <section class="wrap features" aria-label="Características">
-      <div class="feature pixel-frame"><span class="feature-icon" aria-hidden="true">🗺️</span><h3>Hoenn + Kanto</h3><p data-l="es">Dos regiones en una sola partida.</p><p data-l="en">Two regions in a single save.</p></div>
-      <div class="feature pixel-frame"><span class="feature-icon" aria-hidden="true">🏅</span><h3><span data-l="es">16 gimnasios</span><span data-l="en">16 gyms</span></h3><p data-l="es">Ocho medallas por región.</p><p data-l="en">Eight badges per region.</p></div>
-      <div class="feature pixel-frame"><span class="feature-icon" aria-hidden="true">📖</span><h3>Gen 1–4</h3><p data-l="es">Todos los Pokémon hasta Sinnoh.</p><p data-l="en">Every Pokémon up to Sinnoh.</p></div>
-      <div class="feature pixel-frame"><span class="feature-icon" aria-hidden="true">🔥</span><h3><span data-l="es">Modo Gallinero</span><span data-l="en">Gallinero mode</span></h3><p data-l="es">Sin items en batalla, level caps y una IA que no perdona.</p><p data-l="en">No items in trainer battles, level caps and an AI that shows no mercy.</p></div>
+      <div class="feature pixel-frame reveal"><span class="feature-icon" aria-hidden="true">🗺️</span><h3>Hoenn + Kanto</h3><p data-l="es">Dos regiones en una sola partida.</p><p data-l="en">Two regions in a single save.</p></div>
+      <div class="feature pixel-frame reveal"><span class="feature-icon" aria-hidden="true">🏅</span><h3><span data-l="es">16 gimnasios</span><span data-l="en">16 gyms</span></h3><p data-l="es">Ocho medallas por región.</p><p data-l="en">Eight badges per region.</p></div>
+      <div class="feature pixel-frame reveal"><span class="feature-icon" aria-hidden="true">📖</span><h3>Gen 1–4</h3><p data-l="es">Todos los Pokémon hasta Sinnoh.</p><p data-l="en">Every Pokémon up to Sinnoh.</p></div>
+      <div class="feature pixel-frame reveal"><span class="feature-icon" aria-hidden="true">🔥</span><h3><span data-l="es">Modo Gallinero</span><span data-l="en">Gallinero mode</span></h3><p data-l="es">Sin items en batalla, level caps y una IA que no perdona.</p><p data-l="en">No items in trainer battles, level caps and an AI that shows no mercy.</p></div>
+    </section>
+
+    <section id="saga" class="wrap section" aria-labelledby="saga-title">
+      <div class="section-head">
+        <h2 id="saga-title"><span data-l="es">La saga</span><span data-l="en">The saga</span></h2>
+        <p class="muted"><span data-l="es">Cuatro capítulos, una sola partida</span><span data-l="en">Four chapters, one single save</span></p>
+      </div>
+      <ol class="saga">
+        <li class="saga-card pixel-frame reveal">
+          <img class="saga-badge" src="assets/saga-1-hoenn-kanto.webp" alt="" width="160" height="160" loading="lazy">
+          <div class="saga-copy">
+            <p class="saga-num">1.0</p>
+            <h3>Hoenn + Kanto</h3>
+            <p data-l="es">Dos regiones unidas, 16 gimnasios y Satoshi esperándote donde menos lo crees.</p>
+            <p data-l="en">Two regions joined, 16 gyms and Satoshi waiting where you least expect him.</p>
+            <span class="badge badge-new"><span data-l="es">Disponible</span><span data-l="en">Out now</span></span>
+          </div>
+        </li>
+        <li class="saga-card pixel-frame reveal">
+          <img class="saga-badge" src="assets/saga-2-liga-gallos.webp" alt="" width="160" height="160" loading="lazy">
+          <div class="saga-copy">
+            <p class="saga-num">1.2</p>
+            <h3><span data-l="es">La Liga de los Gallos</span><span data-l="en">The League of the Gallos</span></h3>
+            <p data-l="es">Después de la Liga, el corral más duro: los Gallos te esperan uno por uno.</p>
+            <p data-l="en">After the League, the toughest pen of all: the Gallos wait for you one by one.</p>
+            <span class="badge badge-new"><span data-l="es">Disponible</span><span data-l="en">Out now</span></span>
+          </div>
+        </li>
+        <li class="saga-card pixel-frame reveal">
+          <img class="saga-badge" src="assets/saga-3-caribe.webp" alt="" width="160" height="160" loading="lazy">
+          <div class="saga-copy">
+            <p class="saga-num">1.3</p>
+            <h3><span data-l="es">Islas del Caribe</span><span data-l="en">Caribbean Islands</span></h3>
+            <p data-l="es">7 islas, 7 Capitanes y el HURACÁN. Los faros te curan y los doblones se hunden si caes.</p>
+            <p data-l="en">7 islands, 7 Captains and the HURACÁN. Lighthouses heal you and doblones sink if you fall.</p>
+            <span class="badge badge-new"><span data-l="es">Disponible</span><span data-l="en">Out now</span></span>
+          </div>
+        </li>
+        <li class="saga-card saga-next pixel-frame reveal">
+          <img class="saga-badge" src="assets/saga-4-frontera.webp" alt="" width="160" height="160" loading="lazy">
+          <div class="saga-copy">
+            <p class="saga-num">1.4</p>
+            <h3><span data-l="es">La Frontera Dominicana</span><span data-l="en">La Frontera Dominicana</span></h3>
+            <p data-l="es">Una isla nueva en el horizonte y la Gran Final Génesis: el capítulo que cierra el sueño.</p>
+            <p data-l="en">A new island on the horizon and the Gran Final Génesis: the chapter that closes the dream.</p>
+            <span class="badge badge-beta"><span data-l="es">20 nov 2026</span><span data-l="en">Nov 20, 2026</span></span>
+          </div>
+        </li>
+      </ol>
     </section>
 
     <section class="wrap" aria-labelledby="save-title"><div class="callout textbox">
@@ -88,11 +140,12 @@
     <section id="novedades" class="wrap section">
       <div class="section-head">
         <h2><span data-l="es">Novedades</span><span data-l="en">Changelog</span></h2>
-        <p class="muted"><!--VERSION_COUNT--> <span data-l="es">versiones publicadas · lo más reciente arriba</span><span data-l="en">versions released · newest first · notes in Spanish</span></p>
+        <p class="muted"><span data-l="es">Las <!--SHOWN_COUNT--> más recientes de <!--VERSION_COUNT--> versiones</span><span data-l="en">The newest <!--SHOWN_COUNT--> of <!--VERSION_COUNT--> versions</span></p>
       </div>
       <div class="timeline">
         <!--CHANGELOG-->
       </div>
+      <p class="all-versions"><a class="link" href="https://github.com/<!--REPO-->/releases"><span data-l="es">Ver todas las versiones en GitHub</span><span data-l="en">See every version on GitHub</span> →</a></p>
     </section>
 
     <section id="pokedex" class="wrap section">
@@ -151,7 +204,7 @@
         <p class="muted"><span data-l="es">Lo que viene para el Polloverse</span><span data-l="en">What's next for the Polloverse</span></p>
       </div>
       <div class="roadmap-grid">
-        <img class="roadmap-img pixel-frame" src="assets/roadmap.jpg" alt="Roadmap Polloverse: 1.0 Final, La Liga de los Gallos, Islas del Caribe, La Frontera Dominicana y Gran Final Genesis" width="572" height="1024" loading="lazy">
+        <img class="roadmap-img pixel-frame reveal" src="assets/roadmap.jpg" alt="Póster de la saga Polloverse: 1.0 Hoenn y Kanto, La Liga de los Gallos, Islas del Caribe, La Frontera Dominicana y Gran Final Génesis, el capítulo final, 20 de noviembre de 2026" width="640" height="1137" loading="lazy">
         <div class="prose">
           <div data-l="es"><!--CONTENT:roadmap--></div>
           <div data-l="en"><!--CONTENT:roadmap.en--></div>
