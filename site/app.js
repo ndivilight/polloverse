@@ -127,7 +127,7 @@
     const out = [];
     for (const w of mon.wild) {
       out.push({
-        html: `${esc(w.map)} <span class="region region-${esc(w.region.toLowerCase())}">${esc(w.region)}</span> · ${esc(t[w.method] || w.method)}, ${t.lv} ${w.min === w.max ? w.min : `${w.min}–${w.max}`}`,
+        html: `${esc(w.map)} <span class="region region-${esc(w.region.toLowerCase())}">${esc(w.region)}</span> · ${esc(t[w.method] || w.method)}`, // no levels: wild levels follow your adventure
         here: place && placeOf(w.map, w.region).key === place,
       });
     }
